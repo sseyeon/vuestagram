@@ -1,24 +1,8 @@
-# vuestagram
+## vuestagram
+- vue3로 인스타그램 만들기
 
-## Project setup
-```
-npm install
-```
+<br>
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## 기획안 v1.0
+![image](https://github.com/sseyeon/vuestagram/assets/53461145/096ce027-f58b-4ab3-b719-b00b79800c7c)
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
