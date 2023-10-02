@@ -9,6 +9,7 @@
     <img src="./assets/logo.png" class="logo">
   </div>
   <Container :게시물="게시물"/>
+  <button @click="more">더보기</button>
   <div class="footer">
     <ul class="footer-button-plus">
       <input type="file" id="file" class="inputfile">
@@ -18,17 +19,28 @@
 </template>
 
 <script>
-import Container from './components/Container.vue';
+import Container from './components/Container.vue'
 import postdata from './assets/data.js'
+import axios from 'axios'
 export default {
   name: 'App',
   data() {
     return {
       게시물 : postdata,
+      count : 0,
     }
   },
   components: {
     Container : Container,
+  },
+  methods: {
+    more(){
+      axios.get(`https://codingapple1.github.io/vue/more${this.count}.json`)
+      .then((res)=>{
+        this.게시물.push(res.data);
+        this.count++;
+      })
+    }
   }
 }
 </script>
