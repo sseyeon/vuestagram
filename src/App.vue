@@ -1,48 +1,74 @@
 <template>
   <div class="header">
     <ul class="header-button-left">
-      <li>Cancel</li>
+      <li v-if="step != 0" @click="step = 0">Cancel</li>
     </ul>
     <ul class="header-button-right">
-      <li>Next</li>
+      <li v-if="step == 1" @click="step++">Next</li>
+      <li v-if="step == 2" @click="publish">발행</li>
     </ul>
-    <img src="./assets/logo.png" class="logo">
+    <img src="./assets/logo.png" class="logo" />
   </div>
-  <Container :게시물="게시물"/>
-  <button @click="more">더보기</button>
-  <div class="footer">
+  <Container @write="작성한글 = $event" /> 
+  <Container :게시물="게시물" :step="step" :imgURL="imgURL" />
+  <button v-if="step == 0" @click="more">더보기</button>
+  <div v-if="step == 0" class="footer">
     <ul class="footer-button-plus">
-      <input type="file" id="file" class="inputfile">
+      <input @change="upload" type="file" id="file" class="inputfile" />
       <label for="file" class="input-plus">+</label>
     </ul>
   </div>
 </template>
 
 <script>
-import Container from './components/Container.vue'
-import postdata from './assets/data.js'
-import axios from 'axios'
+import Container from "./components/Container.vue";
+import postdata from "./assets/data.js";
+import axios from "axios";
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
-      게시물 : postdata,
-      count : 0,
-    }
+      게시물: postdata,
+      count: 0,
+      step: 0,
+      imgURL: "",
+      작성한글: "",
+    };
   },
   components: {
-    Container : Container,
+    Container: Container,
   },
   methods: {
-    more(){
-      axios.get(`https://codingapple1.github.io/vue/more${this.count}.json`)
-      .then((res)=>{
-        this.게시물.push(res.data);
-        this.count++;
-      })
-    }
-  }
-}
+    publish() {
+      var myPost = {
+        name: "SeYeon Jeong",
+        userImage: "https://picsum.photos/100?random=22",
+        postImage: this.imgURL,
+        likes: Math.ceil(Math.random() * 100),
+        date: "Oct 2",
+        liked: false,
+        content: this.작성한글,
+        filter: "perpetua",
+      };
+      this.게시물.unshift(myPost);
+      this.step = 0;
+    },
+    more() {
+      axios
+        .get(`https://codingapple1.github.io/vue/more${this.count}.json`)
+        .then((res) => {
+          this.게시물.push(res.data);
+          this.count++;
+        });
+    },
+    upload(e) {
+      let 파일 = e.target.files;
+      let url = URL.createObjectURL(파일[0]);
+      this.step = 1;
+      this.imgURL = url;
+    },
+  },
+};
 </script>
 
 <style>
@@ -75,7 +101,7 @@ ul {
   float: left;
   width: 50px;
   padding-left: 20px;
-  cursor:pointer;
+  cursor: pointer;
   margin-top: 10px;
 }
 .header-button-right {
@@ -83,10 +109,10 @@ ul {
   float: right;
   width: 50px;
   padding-left: 20px;
-  cursor:pointer;
+  cursor: pointer;
   margin-top: 10px;
 }
-.footer{
+.footer {
   width: 100%;
   position: sticky;
   bottom: 0;
@@ -106,10 +132,10 @@ ul {
   height: 600px;
   background-color: white;
 }
-.inputfile{
+.inputfile {
   display: none;
 }
-.input-plus{
+.input-plus {
   cursor: pointer;
 }
 #app {
