@@ -19,4 +19,8 @@ public class PostComment {
     @JoinColumn(name = "post_id")
     @JsonManagedReference
     private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 }

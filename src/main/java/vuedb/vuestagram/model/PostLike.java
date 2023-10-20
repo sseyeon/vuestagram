@@ -19,5 +19,7 @@ public class PostLike {
     @JsonManagedReference
     private Post post;
 
-
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 }
