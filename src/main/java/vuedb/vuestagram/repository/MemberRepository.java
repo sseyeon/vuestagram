@@ -5,4 +5,5 @@ import vuedb.vuestagram.model.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
+    Member findByUseridAndPassword(String userid, String password);
 }

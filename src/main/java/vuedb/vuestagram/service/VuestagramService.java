@@ -82,6 +82,21 @@ public class VuestagramService {
         BeanUtils.copyProperties(request, member);
         return memberRepository.save(member);
     }
+
+    // readMember(userid, password) : userid와 password를 사용하여 멤버를 조회하고 해당 멤버의 ID 값을 반환
+    public Long readMember(String userid, String password) {
+        // 주어진 userid와 password를 사용하여 멤버를 조회
+        Member member = memberRepository.findByUseridAndPassword(userid, password);
+
+        if (member != null) {
+            // 멤버가 존재하면 해당 멤버의 id(PK)를 반환
+            return member.getId();
+        } else {
+            // 멤버가 존재하지 않으면 null을 반환하거나 예외 처리를 수행할 수 있음
+            return null;
+        }
+    }
+
     // updateMember(id, Member) : id, MemberCreationRequest로 id에 해당하는 회원을 MemberCreationRequest로 변경함
     public Member updateMember(Long id, @NotNull MemberCreationRequest request) {
         // member_id를 사용하여 Member 엔터티를 조회하고 존재하지 않을 경우 EntityNotFoundException 발생
@@ -100,13 +115,13 @@ public class VuestagramService {
 
 
 //    readPostLike(Long id) : ID를 기준으로 포스팅의 좋아요 갯수 조회
-    private Long readPostLike(Long id){
+    public Long readPostLikes(Long id){
         // 주어진 postId에 해당하는 포스트 좋아요 데이터의 개수를 계산
         return postLikeRepository.countByPost_id(id);
     }
 
     // createPostLike(post_id, member_id) : ID를 기준으로 포스팅에 좋아요 추가
-    private PostLike createPostLike(Long post_id, Long member_id) {
+    public PostLike createPostLike(Long post_id, Long member_id) {
         // 주어진 post_id에 해당하는 포스트를 조회
         Post post = postRepository.findById(post_id)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + post_id));
