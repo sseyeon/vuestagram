@@ -5,4 +5,6 @@ import vuedb.vuestagram.model.PostLike;
 
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     Long countByPost_id(Long postId);
+
+    PostLike findByPost_idAndMember_id(Long postId, Long memberId);
 }

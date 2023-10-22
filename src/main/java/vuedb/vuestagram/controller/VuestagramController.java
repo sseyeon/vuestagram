@@ -33,9 +33,14 @@ public class VuestagramController {
         return vuestagramService.readPost(id);
     }
 
-    @GetMapping("/posts/{memberId}")
-    public Post getPostByMember(@PathVariable Long memberId, @RequestParam Boolean isFollower) {
-        return vuestagramService.readPost(memberId, isFollower);
+    @GetMapping("/posts/{type}/{id}")
+    public Post getPostByMember(@PathVariable("type") String type, @PathVariable("id") Long id) {
+        if (type.equals("member")) {
+            return vuestagramService.readPost(id, Boolean.FALSE);
+        } else {
+            return vuestagramService.readPost(id, Boolean.TRUE);
+
+        }
     }
 
     @PostMapping("/posts")
@@ -43,9 +48,15 @@ public class VuestagramController {
         return vuestagramService.createPost(memberId, request);
     }
 
+    @DeleteMapping("/posts/{postId}")
+    public String deletePost(@PathVariable Long postId) {
+        vuestagramService.deletePost(postId);
+        return "OK";
+    }
+
     @GetMapping("/members")
-    public Long getMemberId(@RequestParam String userid, @RequestParam String password) {
-        return vuestagramService.readMember(userid, password);
+    public Long getMemberId(@RequestParam String userid) {
+        return vuestagramService.readMember(userid);
     }
 
     @PutMapping("/members/{id}")
@@ -53,16 +64,39 @@ public class VuestagramController {
         return vuestagramService.updateMember(id, request);
     }
 
-    @GetMapping("/posts/{id}/likes")
+    @PostMapping("/members")
+    public Member createMember(@RequestBody MemberCreationRequest request) {
+        return vuestagramService.createMember(request);
+    }
+    @GetMapping("/posts-likes/{id}")
     public Long getPostLikes(@PathVariable Long id) {
         return vuestagramService.readPostLikes(id);
     }
-    @PostMapping("/posts/{post_id}/likes/{member_id}")
-    public PostLike createPostLike(@PathVariable Long post_id, @PathVariable Long member_id) {
+    @PostMapping("/post-likes")
+    public PostLike createPostLike(@PathVariable("post_id") Long post_id, @PathVariable("member_id") Long member_id) {
         return vuestagramService.createPostLike(post_id, member_id);
     }
-    @PostMapping("/posts/{post_id}/comments/{member_id}")
+
+    @DeleteMapping("/post-likes/{id}")
+    public String deletePostLike(@PathVariable Long post_like_id) {
+        vuestagramService.deletePostLike(post_like_id);
+        return "OK";
+    }
+
+    @GetMapping("/post-comments/{post_id}")
+    public PostComment getPostComments(@PathVariable Long post_id) {
+        return vuestagramService.readPostComments(post_id);
+    }
+
+    @PostMapping("/post-comments")
     public PostComment createPostComments(@PathVariable Long post_id, @PathVariable Long member_id, @RequestBody String comment) {
         return vuestagramService.createPostComments(post_id, member_id, comment);
     }
+
+    @DeleteMapping("/post-comments/{pc_id}")
+    public String deletePostComments(@PathVariable Long pc_id) {
+        vuestagramService.deletePostComments(pc_id);
+        return "OK";
+    }
+
 }

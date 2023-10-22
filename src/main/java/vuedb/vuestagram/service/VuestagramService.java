@@ -77,16 +77,16 @@ public class VuestagramService {
         postRepository.deleteById(id);
     }
     // createMember(Member) : MemberCreationRequest로 회원을 생성
-    public Member createMmeber(MemberCreationRequest request) {
+    public Member createMember(MemberCreationRequest request) {
         Member member = new Member();
         BeanUtils.copyProperties(request, member);
         return memberRepository.save(member);
     }
 
     // readMember(userid, password) : userid와 password를 사용하여 멤버를 조회하고 해당 멤버의 ID 값을 반환
-    public Long readMember(String userid, String password) {
-        // 주어진 userid와 password를 사용하여 멤버를 조회
-        Member member = memberRepository.findByUseridAndPassword(userid, password);
+    public Long readMember(String userid) {
+        // 주어진 userid를 사용하여 멤버를 조회
+        Member member = memberRepository.findByUserid(userid);
 
         if (member != null) {
             // 멤버가 존재하면 해당 멤버의 id(PK)를 반환
@@ -140,8 +140,15 @@ public class VuestagramService {
     }
 
     // deletePostLike(post_id, member_id) : ID를 기준으로 포스팅에 좋아요 삭제
-    private void deletePostLike(Long id) {
-        postLikeRepository.deleteById(id);
+    // [수정] deletePostLike(id) : ID를 기준으로 포스팅에 좋아요 삭제
+    public void deletePostLike(Long post_like_id) {
+        postLikeRepository.deleteById(post_like_id);
+//        // 주어진 post_id와 member_id에 해당하는 포스트 좋아요를 조회
+//        PostLike postLike = postLikeRepository.findByPost_idAndMember_id(post_id, member_id);
+//        if (postLike != null) {
+//            Long id = postLike.getId();
+//            postLikeRepository.deleteById(id);
+//        }
     }
 
     // readPostComments(Long id) : ID를 기준으로 포스팅의 댓글 조회
@@ -176,7 +183,7 @@ public class VuestagramService {
     }
 
     // deletePostComments(id) : ID를 기준으로 포스팅에 댓글 삭제
-    private void deletePostComments(Long id) {
+    public void deletePostComments(Long id) {
         postCommentRepository.deleteById(id);
     }
 }
